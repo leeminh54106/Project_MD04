@@ -1,14 +1,16 @@
 package ra.project.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import ra.project.exception.CustomException;
+import ra.project.model.entity.Roles;
 import ra.project.model.entity.Users;
 
 
 import java.util.List;
 public interface IUserService {
-   List<Users> getAllUsers();
+   List<Roles> getAllUsers();
     Users getUserById(Long id);
     Users getUserByUserName(String username);
-    Users updateUserStatus(Long id, Boolean status);
+    Users updateUserStatus(Long id) throws CustomException;
     Page<Users> getUsersWithPaginationAndSorting(Pageable pageable, String search);
 }

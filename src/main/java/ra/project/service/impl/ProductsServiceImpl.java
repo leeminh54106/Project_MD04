@@ -33,7 +33,8 @@ public class ProductsServiceImpl implements IProductsService {
 
     @Override
     public Products getProductById(Long id) {
-        return productsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
+        return productsRepository
+                .findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
     }
 
     @Override
@@ -42,6 +43,7 @@ public class ProductsServiceImpl implements IProductsService {
             throw new CustomException("Tên sản phẩm đã tồn tại", HttpStatus.CONFLICT);
         }
         Products product = Products.builder()
+                .sku(productRequest.getSku())
                 .name(productRequest.getName())
                 .price(productRequest.getPrice())
                 .quantity(productRequest.getQuantity())
@@ -55,25 +57,44 @@ public class ProductsServiceImpl implements IProductsService {
     }
 
     @Override
-    public Products updateProduct(Long id, Products product) {
-        productsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
+    public Products updateProduct(Long id, ProductRequest productRequest) throws CustomException {
+        productsRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
+        if(productsRepository.existsByName(productRequest.getName())) {
+            throw new CustomException("Tên sản phẩm đã tồn tại", HttpStatus.CONFLICT);
+        }
+        Products product = Products.builder()
+                .sku(productRequest.getSku())
+                .name(productRequest.getName())
+                .price(productRequest.getPrice())
+                .quantity(productRequest.getQuantity())
+                .image(uploadFile.uploadLocal(productRequest.getImage()))
+                .createdAt(new Date())
+                .updatedAt(new Date())
+                .build();
+        Categories categories = categoriesService.getCategoriesById(productRequest.getCategoryId());
+        product.setCategories(categories);
         product.setId(id);
        return productsRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        productsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
+        productsRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy sản phẩm có mã là : " +id));
         productsRepository.deleteById(id);
     }
 
     @Override
-    public Page<Products> getProductsWithPaginationAndSorting(Pageable pageable, String search) {
+    public Page<Products> getProductsWithPaginationAndSorting(Pageable pageable, String search) throws CustomException {
         Page<Products> productsPage;
-        if(search.isEmpty()){
+        if(search==null || search.isEmpty()){
             productsPage = productsRepository.findAll(pageable);
         }else {
-            productsPage = productsRepository.findProductsByNameContainingIgnoreCase(search, pageable);
+            productsPage = productsRepository.findProductsByNameContainsIgnoreCase(search, pageable);
+            if(productsPage.isEmpty()){
+                throw new CustomException("Không tìm thấy sản phẩm có tên là : " +search,HttpStatus.NOT_FOUND);
+            }
         }
         return productsPage;
     }

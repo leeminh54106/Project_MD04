@@ -35,14 +35,16 @@ private String sku= UUID.randomUUID().toString();
     @NotNull(message = "Ảnh không được để trống")
     private MultipartFile image;
 
-    @NotNull(message = "createdAt not null")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past(message = "Created date must be in the past")
+    private String description;
+
+//    @NotNull(message = "createdAt not null")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @Past(message = "Created date must be in the past")
     private Date createdAt;
 
-    @NotNull(message = "Expire date is empty")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "Expire date must be in the future or present")
+//    @NotNull(message = "Expire date is empty")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @FutureOrPresent(message = "Expire date must be in the future or present")
     private Date expireAt;
 
     private Long categoryId;

@@ -16,10 +16,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tên tài khoản!"));
-return MyUserDetails.builder()
-        .users(users)
-        .authorities(users.getRoles().stream().map(roles -> new SimpleGrantedAuthority(roles.getRoleName().toString())).toList())
-        .build();
+        Users users = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tên tài khoản!"));
+        return MyUserDetails.builder()
+                .users(users)
+                .authorities(users.getRoles().stream().map(roles -> new SimpleGrantedAuthority(roles.getRoleName().toString())).toList())
+                .build();
     }
 }

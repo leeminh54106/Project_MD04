@@ -1,7 +1,6 @@
 package ra.project.security.jwt;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,10 +29,18 @@ public class JwtProvider {
         try {
         Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
         return true;
-        } catch (Exception e) {
-            log.error("Exception {}", e.getMessage());
-            return false;
+        } catch (ExpiredJwtException e) {
+            log.error("JWT: Thời gian đăng nhập đã hết hạn:", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.error("JWT: không hỗ trợ mã hóa:", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.error("JWT: Chuỗi mã hóa không đúng:", e.getMessage());
+        } catch (SignatureException e) {
+            log.error("JWT: Lỗi không khớp signature:", e.getMessage());
+        } catch (IllegalArgumentException e) {//Đối số chuyền vào không hợp lệ
+            log.error("JWT: Lỗi đối số không hợp lệ: ", e.getMessage());
         }
+        return false;
     }
     public String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();

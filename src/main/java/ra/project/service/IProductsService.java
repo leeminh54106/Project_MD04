@@ -12,7 +12,7 @@ public interface IProductsService {
     List<Products> getProducts();
     Products getProductById(Long id);
     Products insertProduct(ProductRequest products) throws CustomException;
-    Products updateProduct(Long id,Products product);
+    Products updateProduct(Long id,ProductRequest productRequest) throws CustomException;
     void deleteProduct(Long id);
-    Page<Products> getProductsWithPaginationAndSorting(Pageable pageable,String search);
+    Page<Products> getProductsWithPaginationAndSorting(Pageable pageable,String search) throws CustomException;
 }

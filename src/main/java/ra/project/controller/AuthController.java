@@ -19,7 +19,7 @@ public class AuthController {
     private final IAuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> handleRegister(@RequestBody FormRegister formRegister) throws CustomException {
+    public ResponseEntity<?> handleRegister(@Valid @RequestBody FormRegister formRegister) throws CustomException {
         authService.register(formRegister);
         return ResponseEntity.created(URI.create("api/v1/auth/register")).body("Register successfully");
     }

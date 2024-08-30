@@ -1,4 +1,4 @@
-package ra.project.security;
+package ra.project.security.exception;
 
 
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ra.project.constants.RoleName;
-import ra.project.security.exception.AccessDenied;
-import ra.project.security.exception.JwtEntryPoint;
 import ra.project.security.jwt.JwtTokenFilter;
 import ra.project.security.principle.MyUserDetailsService;
 
@@ -77,5 +76,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
         return auth.getAuthenticationManager();
     }
+
 
 }
