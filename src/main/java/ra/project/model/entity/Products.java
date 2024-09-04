@@ -27,6 +27,7 @@ public class Products {
     private String image;
     private Date createdAt;
     private Date updatedAt;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "category_id",referencedColumnName = "id")

@@ -16,4 +16,5 @@ public interface ICategoriesService {
     Categories updateCategories(Long id,CategoryRequest categories) ;
     void deleteCategories(Long id);
     Page<Categories> getCategoriesWithPaginationAndSorting(Pageable pageable,String search);
+    Page<Categories> listCategoriesForSale(Pageable pageable);
 }

@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import ra.project.exception.CustomException;
 import ra.project.model.dto.req.CategoryRequest;
 import ra.project.model.entity.Categories;
 import ra.project.model.entity.Products;
 import ra.project.repository.ICategoriesRepository;
+import ra.project.repository.IProductsRepository;
 import ra.project.service.ICategoriesService;
 
 import java.util.Date;
@@ -20,7 +22,8 @@ import java.util.NoSuchElementException;
 public class CategoriesServiceImpl implements ICategoriesService {
     @Autowired
     private ICategoriesRepository categoriesRepository;
-
+    @Autowired
+    private IProductsRepository productsRepository;
     @Override
     public List<Categories> getCategories() {
         return categoriesRepository.findAll();
@@ -62,6 +65,9 @@ public class CategoriesServiceImpl implements ICategoriesService {
     public void deleteCategories(Long id) {
         categoriesRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Không tìm thấy danh mục có mã là: " + id));
+        if(productsRepository.existsByCategoriesId(id)) {
+            throw new AccessDeniedException("Không thể xóa danh mục vì nó có sản phẩm");
+        }
         categoriesRepository.deleteById(id);
     }
 
@@ -75,5 +81,10 @@ public class CategoriesServiceImpl implements ICategoriesService {
             categories = categoriesRepository.findAllByNameContains(search,pageable);
         }
         return categories;
+    }
+
+    @Override
+    public Page<Categories> listCategoriesForSale(Pageable pageable) {
+        return categoriesRepository.findCategoriesByStatusTrue(pageable);
     }
 }

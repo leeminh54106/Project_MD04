@@ -37,6 +37,8 @@ private String sku= UUID.randomUUID().toString();
 
     private String description;
 
+    private Boolean status;
+
 //    @NotNull(message = "createdAt not null")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
 //    @Past(message = "Created date must be in the past")

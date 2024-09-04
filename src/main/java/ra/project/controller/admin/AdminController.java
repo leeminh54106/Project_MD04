@@ -18,16 +18,19 @@ public class AdminController {
     @Autowired
     private IUserService userService;
 
+    //vào trang admin
     @GetMapping
     public ResponseEntity<?> getUsers() {
-        return ResponseEntity.ok().body("đây là trang quản trị!");
+        return ResponseEntity.ok().body("Chào mừng bạn đến với trang quản trị!");
     }
 
+    //danh sách quyền
     @GetMapping("/userAdmin")
     public ResponseEntity<DataResponse> getAllUserAdmin() {
         return new ResponseEntity<>(new DataResponse(userService.getAllUsers(), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //tìm kiếm user,hiển thị user
     @GetMapping("/searchByName")
     public ResponseEntity<?> searchUserByName(@PageableDefault(page = 0,
             size = 3,
@@ -38,6 +41,7 @@ public class AdminController {
                 .getContent(), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //khóa user
     @PutMapping("/user/{id}")
     public ResponseEntity<Users> changeUserStatus(@PathVariable Long id) throws CustomException {
 

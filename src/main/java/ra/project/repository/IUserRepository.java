@@ -12,4 +12,7 @@ public interface IUserRepository extends JpaRepository<Users,Long> {
     Optional<Users> findByUsername(String username);
     Page<Users> findByUsernameContaining(String username, Pageable pageable);
     boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
+
 }

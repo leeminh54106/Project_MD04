@@ -20,32 +20,38 @@ public class CategoriesController {
     @Autowired
     private ICategoriesService categoriesService;
 
+    //danh sách danh mục
     @GetMapping
     public ResponseEntity<DataResponse> getAllCategories() {
         return new ResponseEntity<>(new DataResponse(categoriesService.getCategories(), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //danh mục theo id
     @GetMapping("/{id}")
     public ResponseEntity<DataResponse> getCategoryById(@PathVariable Long id) {
         return new ResponseEntity<>(new DataResponse(categoriesService.getCategoriesById(id), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //thêm danh mục
     @PostMapping
     public ResponseEntity<DataResponse> insertCategory(@Valid @RequestBody CategoryRequest categories) throws CustomException {
         return new ResponseEntity<>(new DataResponse(categoriesService.insertCategories(categories), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //sửa danh mục
     @PutMapping("/{id}")
     public ResponseEntity<DataResponse> updateCategory( @PathVariable Long id,@Valid @RequestBody CategoryRequest categories) {
         return new ResponseEntity<>(new DataResponse(categoriesService.updateCategories(id, categories), HttpStatus.OK), HttpStatus.OK);
     }
 
+    //xóa danh mục
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponse> deleteCategory(@PathVariable Long id) {
         categoriesService.deleteCategories(id);
         return new ResponseEntity<>(new DataResponse("Đã xóa thành công danh mục có mã là : " + id, HttpStatus.OK), HttpStatus.OK);
     }
 
+    //tìm kiếm,hiển thị, phân trang
     @GetMapping("/searchByName")
     public ResponseEntity<DataResponse> searchByName(@PageableDefault(page = 0,
             size = 3,
