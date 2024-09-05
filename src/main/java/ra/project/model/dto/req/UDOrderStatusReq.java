@@ -9,5 +9,6 @@ import ra.project.constants.OrderStatus;
 @Setter
 @Builder
 public class UDOrderStatusReq {
+
     private OrderStatus status;
 }

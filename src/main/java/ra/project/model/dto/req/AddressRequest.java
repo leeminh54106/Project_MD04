@@ -10,9 +10,11 @@ import lombok.*;
 @Builder
 public class AddressRequest {
     private Long id;
+    @NotBlank(message = "địa chỉ không được để trống")
     private String fullAddress;
     @NotBlank(message = "Số điện thoại không được để trống")
     private String phone;
+    @NotBlank(message = "tên người nhận không được để trống")
     private String receiveName;
     private Long userId;
 }

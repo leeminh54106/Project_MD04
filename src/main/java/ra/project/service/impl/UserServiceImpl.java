@@ -31,6 +31,12 @@ public class UserServiceImpl implements IUserService {
     private final UploadFile uploadFile;
 
     @Override
+    public Users getCurrentUser() {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails.getUsers();
+    }
+
+    @Override
     public List<Roles> getAllUsers() {
        List<Users> users = userRepository.findAll();
     List <Roles> roles = users.stream()
@@ -81,6 +87,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean changePassword(String oldPassword, String newPassword, String confirmPassword) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if(!passwordEncoder.matches(oldPassword, userDetails.getUsers().getPassword())) {
             throw new NoSuchElementException("Mật khẩu cũ của bạn không đúng, mời bạn nhập lại !");
         }
@@ -89,6 +96,9 @@ public class UserServiceImpl implements IUserService {
         }
         if (!newPassword.equals(confirmPassword)) {
             throw new NoSuchElementException("Nhập lại mật khẩu không chính xác !");
+        }
+        if(oldPassword.trim().isEmpty() || newPassword.trim().isEmpty()){
+            throw new NoSuchElementException("Mật khẩu không được để trống");
         }
 
         userDetails.getUsers().setPassword(passwordEncoder.encode(newPassword));

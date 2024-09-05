@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ra.project.model.dto.req.UserRequest;
 import ra.project.model.dto.resp.DataResponse;
+import ra.project.model.entity.Users;
 import ra.project.security.principle.MyUserDetails;
 import ra.project.service.ICategoriesService;
 import ra.project.service.IProductsService;
@@ -25,14 +26,17 @@ public class UserController{
     private final IUserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getFullName()
+    public ResponseEntity<?> getUser()
     {
+        Users currentUser = userService.getCurrentUser();
+//        return ResponseEntity.ok(currentUser);
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok().body("Chào mừng bạn " + userDetails.getUsers().getFullName());
+        return ResponseEntity.ok().body(userDetails.getUsers());
+
     }
 
     @PutMapping("/change_password")
-    public ResponseEntity<String> changePassword(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> changePassword(@RequestBody UserRequest userRequest) {
         boolean result = userService.changePassword(userRequest.getOldPassword(), userRequest.getNewPassword(), userRequest.getConfirmNewPassword());
         if (result) {
             return ResponseEntity.ok("Đổi mật khẩu thành công !!");

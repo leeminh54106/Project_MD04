@@ -16,4 +16,5 @@ public interface IUserService {
     Page<Users> getUsersWithPaginationAndSorting(Pageable pageable, String search);
     boolean changePassword(String oldPassword, String newPassword, String confirmPassword);
     Users updateUser(UserRequest userRequest);
+ Users getCurrentUser();
 }

@@ -26,11 +26,11 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public Address addNewAddress(AddressRequest address) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (address.getPhone() != null) {
-            if (addressRepository.existsByPhone(address.getPhone())) {
-                throw new NoSuchElementException("Số điện thoại đã tồn tại");
-            }
-        }
+//        if (address.getPhone() != null) {
+//            if (addressRepository.existsByPhone(address.getPhone())) {
+//                throw new NoSuchElementException("Số điện thoại đã tồn tại");
+//            }
+//        }
         Address newAddress = Address.builder()
                 .users(userDetails.getUsers())
                 .fullAddress(address.getFullAddress())
